@@ -3,7 +3,6 @@ import {ajax} from "ajax";
 import Add from "./Add.js";
 import Update from "./Update.js";
 import {Button,Table, Icon} from "antd";
-import {connect} from "react-redux";
 import store from "store";
 export default class Films extends React.Component{
   constructor(props){

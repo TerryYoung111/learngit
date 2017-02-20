@@ -1,11 +1,114 @@
 import React from "react";
+import {ajax} from "ajax";
+import Add from "./Add"
+import {Button,Table, Icon} from "antd";
 export default class Show extends React.Component{
-  constructor(props){
-    super(props);
-  }
+    constructor(props){
+      super(props);
+      this.state={
+        data:[],
+        selectedRowKeys:[]
+      }
+    }
+    componentWillMount(){
+      this.show();
+    }
+    show(){
+        ajax({
+          type:'get',
+          url:'/show/find',
+          data:{
+            submitType: "findJoin",
+            ref: "films"
+          },
+          success:function(data){
+              this.setState({
+                data:data
+              })
+          }.bind(this)
+        })
+    }
+    del(){
+      console.log(this.state.selectedRowKeys);
+      ajax({
+        type:'post',
+        url:'/show/del',
+        data:{
+          ids:JSON.stringify(this.state.selectedRowKeys)
+        },
+        success:function(){
+          this.show();
+        }.bind(this)
+      })
+    }
     render(){
+      const columns = [{
+        title:'图片',
+        dataIndex:'',
+        render: (record) => {
+          console.log(record.films.indexImg);
+          return <img style={{width:"40px",height:"60px"}} src = {record.films.indexImg}/>
+        }
+      },{
+        title: '中文名',
+        dataIndex: 'films.cnname',
+        width:"10%"
+      },{
+        title: '英文名',
+        dataIndex: 'films.enname',
+        width:"10%"
+      },{
+        title: '类型',
+        dataIndex: 'films.type',
+        width:"5%"
+      },{
+        title:"区域",
+        dataIndex:"films.area",
+        width:"5%"
+      },{
+        title:"年代",
+        dataIndex:"films.year",
+        width:"5%"
+      },{
+        title:"时长",
+        dataIndex:"films.time",
+        width:"7%"
+      },{
+        title:"上映时间",
+        dataIndex:"films.uptime",
+        width:"8%"
+      },{
+        title:"上映地区",
+        dataIndex:"films.uparea",
+        width:"7%"
+      },{
+        title:"票房",
+        dataIndex:"films.boxOffice",
+        width:"4%"
+      },{
+        title:"剧情简介",
+        dataIndex:"films.intro",
+        width:"40%"
+      }];
+      const pagination = {
+          total: this.state.data.length,
+          pageSize:5,
+          showSizeChanger: true
+        };
+      const rowSelection = {
+        onChange:function(selectedRowKeys){
+          this.setState({
+            selectedRowKeys:selectedRowKeys
+          })
+        }.bind(this)
+      }
       return <div style={{padding:'20px 60px 0px 60px',height:'814px'}}>
           <h1 style={{marginBottom:'30px'}}>热映管理</h1>
+          <Add show={this.show.bind(this)} data={this.state.data}></Add>
+          <Button type="primary" onClick={this.del.bind(this)}>删除</Button>
+          <Table columns={columns} rowSelection={rowSelection}
+          dataSource={this.state.data} pagination={pagination} bordered={true}
+           rowKey={record => record._id} style={{backgroundColor:'#d9dec3'}}></Table>
       </div>
     }
-}
+  }

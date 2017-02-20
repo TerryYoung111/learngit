@@ -59,9 +59,6 @@ export default class MyHeader extends React.Component{
         <Col span={12} push={1}><h1 style={{color:'white'}}>LOGO</h1></Col>
         <Col span={5} offset={4}>
           <Menu onClick={this.handleClick.bind(this)} mode="horizontal" style={{height:'65px',lineHeight:'64px',color:'white',backgroundColor:'#454d4c'}}>
-            <Menu.Item key='reg'>
-              <Icon type="question-circle" />注册
-            </Menu.Item>
             <Menu.Item key="login" disabled={loginDisabled}>
               <Icon type="user"/>登录
             </Menu.Item>
