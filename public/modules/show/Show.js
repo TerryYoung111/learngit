@@ -12,6 +12,7 @@ export default class Show extends React.Component{
     }
     componentWillMount(){
       this.show();
+      let uuid = 0;
     }
     show(){
         ajax({
@@ -46,7 +47,6 @@ export default class Show extends React.Component{
         title:'图片',
         dataIndex:'',
         render: (record) => {
-          console.log(record.films.indexImg);
           return <img style={{width:"40px",height:"60px"}} src = {record.films.indexImg}/>
         }
       },{

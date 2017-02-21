@@ -1,5 +1,5 @@
 import React from "react";
-import {ajax} from "ajax";
+import {ajax,hasValue} from "ajax";
 import {Modal,Button,Form,Input,Select,Table} from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -83,39 +83,35 @@ class Add extends React.Component {
           showSizeChanger: true
         };
       const rowSelection = {
-          getCheckboxProps:record =>({
-            defaultValue: record._id = this.state.filmsData._id
-          }),
           onChange:function(selectedRowKeys){
-            var arr = [];
-            ajax({
-              type:"get",
-              url:"/show/find",
-              success:function(data){
-                arr = data;
+            var showDataArr = this.props.data.map(function(value){
+              return {
+                films:{
+                  $ref:"films",
+                  $id:value.films._id
+                }
               }
             })
-            for (var i = 0; i < arr.length; i++) {
-                for (var j = 0; j < selectedRowKeys.length; j++) {
-                  if (arr[i].films._id == selectedRowKeys[j]) {
-                    arr.splice(i,1);
-                  }
-                }
-            }
-            for (var m = 0; m < selectedRowKeys.length; m++) {
-              arr.push({
-                films:{
-                  $id:selectedRowKeys[m],
-                  $ref:"films"
-                }
-              })
-              console.log("添加后",arr);
 
+            for (var i = 0; i < selectedRowKeys.length; i++) {
+              if (hasValue(showDataArr,selectedRowKeys[i],"$id") == -1) {
+                showDataArr.push({
+                  films:{
+                    $id:selectedRowKeys[i],
+                    $ref:"films"
+                  }
+                })
+              }
             }
             this.setState({
-              addData:arr
+              addData:showDataArr
             })
           }.bind(this)
+          // getCheckboxProps: record => {
+          //     console.log(record.cnname)
+          //     console.log(this.props.data);
+          //     return {disabled : true}
+          //   }
         }
       return <div>
         <Button type="primary" onClick={this.showModal.bind(this)}  style={{float:"left",marginRight:"10px"}}>增加</Button>

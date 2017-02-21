@@ -29,4 +29,19 @@ var ajax = function(params){
         }
     });
 }
-export {ajax}
+var hasValue = function(ary,value,attr){
+       for(var i = 0;ary && i < ary.length;i++){
+           if(attr){
+               var aryValue = eval("ary["+i+"].films."+attr);
+               if(aryValue == value){
+                   return i;
+               }
+           }else{
+               if(ary[i] == value){
+                   return i;
+               }
+           }
+       }
+       return -1;
+   }
+export {ajax,hasValue}

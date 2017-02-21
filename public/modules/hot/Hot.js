@@ -101,7 +101,7 @@ export default class Hot extends React.Component{
     }
     return <div style={{padding:'20px 60px 0px 60px',height:'814px'}}>
         <h1 style={{marginBottom:'30px'}}>热播管理</h1>
-        <Add show={this.show.bind(this)}></Add>
+        <Add show={this.show.bind(this)} data = {this.state.data}></Add>
         <Button type="primary" onClick={this.del.bind(this)}>删除</Button>
         <Table columns = {columns} dataSource={this.state.data}
          rowKey={record => record._id} rowSelection={rowSelection}
